@@ -26,7 +26,7 @@
 
 * 传递点击事件，对点击省份事件自定义处理
 
-## 使用向导
+### 使用向导
 
 [实例演示](http://solife.us/jquery/china-map-chart)
 
