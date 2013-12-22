@@ -96,20 +96,26 @@
       "refer": "name",      //参照比较类型，可为: pinyin,name,fanti
       "line_break": "<br>", //分行符
       "data": [
-         /*{ 
+         { 
           "refer_to": "黑龙江",         //指定省份的标识，与refer相关
           "fill": "red",                //自定义各省份地图背景色
           "title": "黑龙江-访客流量",   //自定义提示框标题
-          "body": "人数: 4567次<br>人次: 456人"  //自定义提示框内容
+          "body": "人数: 4567次<br>人次: 456人",  //自定义提示框内容
+          "rank": 1,
+          "text": "456/4567"
           },
          { 
           "refer_to": "上海",           
           "fill": "green",     
           "title": "上海-访客流量",
-          "body":  "人数: 4567次<br>人次: 456人"
-          }*/
+          "body":  "人数: 4567次<br>人次: 456人",
+          "rank": 2,
+          "text": "456/4567"
+          }
       ],
       "is_list": true,         //是否列表省份
+      "is_rank": false,        //在is_list为true时有效
+      "rank_title": "次数/从次",
       "list_type": "checkbox", //显示方式,checkbox/radio/none,为none时即不显示input只显示label
       "list": {                //列表外框样式
         "width": "100px;",
@@ -123,7 +129,7 @@
       },
       "list_label": {        //列表标签
         "font-size": "12px"
-      }
+      },
     }
     
     //http://stackoverflow.com/questions/19902209/json-merge-array-push-sort-remove-doubles
@@ -153,18 +159,14 @@
       chart_provinces_list=document.getElementById("#"+chart_provinces_list_id);
     }
     chart_provinces_list.style.height = chart_opts.container.height;
-    chart_provinces_list.style.width = "100px";
+    chart_provinces_list.style.width    = "100px";
     chart_provinces_list.style.overflow = "auto";
     
     /*鼠标悬浮提示框*/
-    var tooltip = document.createElement("div");
-    $(tooltip).css(chart_opts.tooltip.style);
-    var tooltip_title = document.createElement("div");
-    tooltip.appendChild(tooltip_title);
-    $(tooltip_title).css(chart_opts.tooltip.title);
-    var tooltip_body = document.createElement("div");
-    tooltip.appendChild(tooltip_body);
-    $(tooltip_body).css(chart_opts.tooltip.body);
+    //默认提示框id
+    var chart_tooltip_container_id  = chart_container_id+"_tooltip";
+    var chart_tooltip_container = document.createElement("div");
+    chart_tooltip_container.id  = chart_tooltip_container_id;
    
     /*
        中国34省的绘图信息:
@@ -495,13 +497,15 @@
       }
       //点击地图时响应函数
       function on_click(e){
-          var target     = e.target
+          var target     = e.target;
           var svg = target.className;
           var class_name = svg.baseVal;
           var json_id = class_name.replace("china_map_province_","");
           var item = china_province_infos[json_id];
 
           if(item.status == "none"){
+            tooltip_show(e,item);
+             
             item.status = "selected";
             item.target.style.fill = chart_opts.map.selected_color;
             item.list_div.style.background = chart_opts.map.selected_color;
@@ -516,6 +520,8 @@
             
             if(["checkbox","radio"].indexOf(chart_opts.list_type)>=0)
               item.list_input.checked = false;
+              
+             tooltip_hide(e,item);
           }
           e.preventDefault(); 
       };
@@ -565,26 +571,25 @@
           } 
           
           //是否显示提示框
-          if(chart_opts.is_tooltip) tooltip_hide();
+          if(chart_opts.is_tooltip) tooltip_hide(e,item);
       }
       
       //显示提示框响应函数
       function tooltip_show(e,item) {
-          tooltip.style.left=get_mouse_x(e)+"px";
-          tooltip.style.top=get_mouse_y(e)+"px";
-          tooltip.style.display="block";
-          
-          $(tooltip_title).html(item.tooltip_info.title);
-          $(tooltip_body).html(item.tooltip_info.body);
-          //$(tooltip_title).html("序号:"+item.index);
-          //$(tooltip_body).html("省名:"+item.name+"</br>拼音:"+item.pinyin);
+        if(item.status != "selected") {
+          var x = get_mouse_x(e);
+          var y = get_mouse_y(e);
+          item.tooltip.style.left    = x + "px";
+          item.tooltip.style.top     = y + "px";
+          item.tooltip.style.display = "block";
+        }
       }
       
       //隐藏提示框响应函数
-      function tooltip_hide() {
-          tooltip.style.left= "-10000px";
-          tooltip.style.top= "-10000px";
-          tooltip.style.display="none";
+      function tooltip_hide(e,item) {
+        if(item.status != "selected") {
+         item.tooltip.style.display="none";
+        }
       }
       
       //获取鼠x位置信息
@@ -719,14 +724,37 @@
         item.status = "none";
         //存储该序号对应的path对象
         item.target = chart_svg_g_g_path;
+        /*提示框对象*/
         tooltip_info = get_tooltip_info(item);
-        item.tooltip_info = {"title": tooltip_info[0], "body": tooltip_info[1]}
-        /*省份名称列表*/
-        item.list_div = tmp_province_div;
-        if(["checkbox","radio"].indexOf(chart_opts.list_type)>=0){
-          item.list_input = list_input;
-        }
-        item.list_label = list_label;
+        
+        var tooltip = document.createElement("div");
+        //tooltip.class = "china_map_toolip_"+i;
+        chart_tooltip_container.appendChild(tooltip)
+        $(tooltip).css(chart_opts.tooltip.style);
+        /*
+        $(tooltip).hover(
+          function(e){ 
+            var target = e.target;
+            $(target).addClass("tooltip-on");
+            target.style.display = "block";
+          },
+          function(e){ 
+            var target = e.target;
+            $(target).removeClass("tooltip-on");
+            if(!$(target).hasClass("map-on"))
+              target.style.display = "none"; 
+          }
+        );*/
+        var tooltip_title = document.createElement("div");
+        tooltip.appendChild(tooltip_title);
+        $(tooltip_title).css(chart_opts.tooltip.title);
+        $(tooltip_title).html(tooltip_info[0]);
+        var tooltip_body = document.createElement("div");
+        tooltip.appendChild(tooltip_body);
+        $(tooltip_body).css(chart_opts.tooltip.body);
+        $(tooltip_body).html(tooltip_info[1]);
+        item.tooltip = tooltip;
+        //item.tooltip_info = {"title": tooltip_info[0], "body": tooltip_info[1]}
         
         if(tooltip_info[2][0] && 
           typeof tooltip_info[2][1].fill != "undefined") {
@@ -738,6 +766,31 @@
             item.fill = "none";
             tmp_province_div.style.background = chart_opts.list.background;
         }
+        
+        /*省份名称列表*/
+        item.list_div = tmp_province_div;
+        if(["checkbox","radio"].indexOf(chart_opts.list_type)>=0){
+          item.list_input = list_input;
+          list_input.className = "china_map_input_"+i;
+          /*点击省份input后的响应*/
+          item.list_input.onclick = function(e) {
+            var target = e.target;
+            var class_name = target.className;
+            var json_id = class_name.replace("china_map_input_","");
+            var item = china_province_infos[json_id];
+            if(!target.checked) {
+              item.status = "none";
+              item.target.style.fill = (item.fill=="none" ? chart_opts.map.fill : item.fill);
+              item.list_div.style.background = (item.fill=="none" ? chart_opts.list.background : item.fill);
+              tooltip_hide(e,item);
+            } else {
+              item.status = "selected";
+              item.target.style.fill = chart_opts.map.selected_color;
+              item.list_div.style.background = chart_opts.map.selected_color;
+            }
+          }
+        }
+        item.list_label = list_label;
         
         //鼠标点击效果
         chart_svg_g_g_path.onclick = function(e){ on_click(e) };
@@ -864,7 +917,7 @@
 
         $(chart_container_map).append(chart_svg);
         chart_container.append(chart_container_map);
-        chart_container.append(tooltip);
+        chart_container.append(chart_tooltip_container);
         
         if(chart_opts.is_list) chart_container.append(chart_provinces_list);
         $(chart_container_map).css(chart_opts.container);
