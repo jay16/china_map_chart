@@ -506,7 +506,7 @@
             item.target.style.fill = chart_opts.map.selected_color;
             item.list_div.style.background = chart_opts.map.selected_color;
             
-            if($.inArray(chart_opts.list_type,["checkbox","radio"]))
+            if(["checkbox","radio"].indexOf(chart_opts.list_type)>=0)
               item.list_input.checked = true;
           }
           else if(item.status == "selected") {
@@ -514,7 +514,7 @@
             item.target.style.fill = (item.fill=="none" ? chart_opts.map.fill : item.fill);
             item.list_div.style.background = (item.fill=="none" ? chart_opts.list.background : item.fill);
             
-            if($.inArray(chart_opts.list_type,["checkbox","radio"]))
+            if(["checkbox","radio"].indexOf(chart_opts.list_type)>=0)
               item.list_input.checked = false;
           }
           e.preventDefault(); 
@@ -692,7 +692,7 @@
         tmp_province_div = document.createElement("div");
         tmp_province_div.class = chart_provinces_list+"_"+item.index
         
-        if($.inArray(chart_opts.list_type,["checkbox","radio"])) {
+        if(["checkbox","radio"].indexOf(chart_opts.list_type)>=0) {
           list_input = document.createElement("input");
           tmp_province_div.appendChild(list_input);
           list_input.type = chart_opts.list_type;
@@ -723,7 +723,7 @@
         item.tooltip_info = {"title": tooltip_info[0], "body": tooltip_info[1]}
         /*省份名称列表*/
         item.list_div = tmp_province_div;
-        if($.inArray(chart_opts.list_type,["checkbox","radio"])){
+        if(["checkbox","radio"].indexOf(chart_opts.list_type)>=0){
           item.list_input = list_input;
         }
         item.list_label = list_label;

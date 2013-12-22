@@ -1,11 +1,159 @@
 <script src="../src/jquery.js" type="text/javascript"></script>
 <script src="../src/china_map_chart.js" type="text/javascript"></script>
 
+
 <script>
 $(function(){ 
-  $("#china_map_chart").china_map_chart();
+      chart_data = [];
+       chart_data.push({
+	 "refer_to": "上海",
+	 "fill": "red",
+	 "title": "上海",
+	 "body": "访客次数:8783次&lt;/br&gt;访客人次:331人"
+       });
+       chart_data.push({
+	 "refer_to": "",
+	 "fill": "red",
+	 "title": "",
+	 "body": "访客次数:5883次&lt;/br&gt;访客人次:390人"
+       });
+       chart_data.push({
+	 "refer_to": "北京",
+	 "fill": "red",
+	 "title": "北京",
+	 "body": "访客次数:1230次&lt;/br&gt;访客人次:217人"
+       });
+       chart_data.push({
+	 "refer_to": "河南",
+	 "fill": "red",
+	 "title": "河南",
+	 "body": "访客次数:391次&lt;/br&gt;访客人次:142人"
+       });
+       chart_data.push({
+	 "refer_to": "河北",
+	 "fill": "red",
+	 "title": "河北",
+	 "body": "访客次数:346次&lt;/br&gt;访客人次:12人"
+       });
+       chart_data.push({
+	 "refer_to": "浙江",
+	 "fill": "red",
+	 "title": "浙江",
+	 "body": "访客次数:155次&lt;/br&gt;访客人次:13人"
+       });
+       chart_data.push({
+	 "refer_to": "福建",
+	 "fill": "red",
+	 "title": "福建",
+	 "body": "访客次数:148次&lt;/br&gt;访客人次:16人"
+       });
+       chart_data.push({
+	 "refer_to": "广西",
+	 "fill": "red",
+	 "title": "广西",
+	 "body": "访客次数:138次&lt;/br&gt;访客人次:2人"
+       });
+       chart_data.push({
+	 "refer_to": "广东",
+	 "fill": "red",
+	 "title": "广东",
+	 "body": "访客次数:108次&lt;/br&gt;访客人次:45人"
+       });
+       chart_data.push({
+	 "refer_to": "吉林",
+	 "fill": "red",
+	 "title": "吉林",
+	 "body": "访客次数:76次&lt;/br&gt;访客人次:3人"
+       });
+       chart_data.push({
+	 "refer_to": "江苏",
+	 "fill": "red",
+	 "title": "江苏",
+	 "body": "访客次数:62次&lt;/br&gt;访客人次:5人"
+       });
+       chart_data.push({
+	 "refer_to": "湖南",
+	 "fill": "red",
+	 "title": "湖南",
+	 "body": "访客次数:43次&lt;/br&gt;访客人次:15人"
+       });
+       chart_data.push({
+	 "refer_to": "台湾",
+	 "fill": "red",
+	 "title": "台湾",
+	 "body": "访客次数:36次&lt;/br&gt;访客人次:12人"
+       });
+       chart_data.push({
+	 "refer_to": "辽宁",
+	 "fill": "red",
+	 "title": "辽宁",
+	 "body": "访客次数:19次&lt;/br&gt;访客人次:2人"
+       });
+       chart_data.push({
+	 "refer_to": "安徽",
+	 "fill": "red",
+	 "title": "安徽",
+	 "body": "访客次数:16次&lt;/br&gt;访客人次:1人"
+       });
+       chart_data.push({
+	 "refer_to": "天津",
+	 "fill": "red",
+	 "title": "天津",
+	 "body": "访客次数:13次&lt;/br&gt;访客人次:3人"
+       });
+       chart_data.push({
+	 "refer_to": "山东",
+	 "fill": "red",
+	 "title": "山东",
+	 "body": "访客次数:10次&lt;/br&gt;访客人次:3人"
+       });
+       chart_data.push({
+	 "refer_to": "四川",
+	 "fill": "red",
+	 "title": "四川",
+	 "body": "访客次数:7次&lt;/br&gt;访客人次:3人"
+       });
+       chart_data.push({
+	 "refer_to": "重庆",
+	 "fill": "red",
+	 "title": "重庆",
+	 "body": "访客次数:5次&lt;/br&gt;访客人次:2人"
+       });
+       chart_data.push({
+	 "refer_to": "山西",
+	 "fill": "red",
+	 "title": "山西",
+	 "body": "访客次数:4次&lt;/br&gt;访客人次:1人"
+       });
+       chart_data.push({
+	 "refer_to": "香港",
+	 "fill": "red",
+	 "title": "香港",
+	 "body": "访客次数:3次&lt;/br&gt;访客人次:3人"
+       });
+       chart_data.push({
+	 "refer_to": "陕西",
+	 "fill": "red",
+	 "title": "陕西",
+	 "body": "访客次数:3次&lt;/br&gt;访客人次:3人"
+       });
+       chart_data.push({
+	 "refer_to": "海南",
+	 "fill": "red",
+	 "title": "海南",
+	 "body": "访客次数:1次&lt;/br&gt;访客人次:1人"
+       });
+       
+      
+  $("#china_map_chart").china_map_chart({
+  "map": {
+    "text": "name"
+  },
+	"data": chart_data
+  });
 });
 </script>
 
 <div id="china_map_chart"></div>
+
 
